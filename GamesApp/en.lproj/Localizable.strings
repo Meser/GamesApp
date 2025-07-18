@@ -1,0 +1,21 @@
+/* 
+  Localizable.strings
+  GamesApp
+
+  Created by Juan Hernandez Galvan on 17/07/25.
+  
+*/
+"cancel_title" = "Cancel";
+"delete_title" = "Delete";
+"delete_game" = "Do you want to delete this video game?";
+"description_title" = "Description:";
+"detail_title" = "Video game details";
+"failed_data" = "The data could not be loaded";
+"game_title" = "Title";
+"list_title" = "free-to-play video games";
+"loading_data" = "Loading games…";
+"publisher_title" = "Publisher";
+"release_date_title" = "Release date";
+"retry_title" = "Retry";
+"save_changes" = "Save changes";
+"search_placeholder" = "Search by title or genre";
