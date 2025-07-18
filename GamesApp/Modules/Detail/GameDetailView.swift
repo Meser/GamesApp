@@ -51,6 +51,9 @@ struct GameDetailView: View {
                 .padding()
             }
         }
+        .onTapGesture {
+            UIApplication.shared.endEditing()
+        }
         .navigationTitle("detail_title")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

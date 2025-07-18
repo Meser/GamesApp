@@ -47,6 +47,7 @@ GamesApp/
    ├── Startup/
 ├── Repositories/
 ├── Services/
+├── Utilities/
 ```
 
 ## ▶️ Ejecución
