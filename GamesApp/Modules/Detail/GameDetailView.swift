@@ -63,7 +63,7 @@ struct GameDetailView: View {
             }
         }
         .alert("delete_game", isPresented: $viewModel.showDeleteConfirmation) {
-            Button("Delete", role: .destructive) {
+            Button("delete_title", role: .destructive) {
                 viewModel.deleteGame()
                 onUpdate?()
                 dismiss()

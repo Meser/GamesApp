@@ -6,6 +6,7 @@ Esta aplicación en **SwiftUI (MVVM)** permite descargar, visualizar y gestionar
 
 - Descarga inicial desde: `https://www.freetogame.com/api/games`
 - Búsqueda por nombre o categoría
+- Deslizar hacia abajo para actualizar (Refreshable List)
 - Vista de detalle del videojuego
 - Edición de título y descripción
 - Eliminación lógica 
