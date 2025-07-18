@@ -2,6 +2,8 @@
 
 Esta aplicación en **SwiftUI (MVVM)** permite descargar, visualizar y gestionar un catálogo de videojuegos desde la API pública de FreeToGame, usando **Realm** para almacenamiento local.
 
+##  Nota: en la rama swiftDataExample se encuentra el mismo proyecto, pero basado en swiftData 🚨🚨🚨
+
 ## 📱 Funcionalidades
 
 - Descarga inicial desde: `https://www.freetogame.com/api/games`
