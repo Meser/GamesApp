@@ -1,18 +1,15 @@
-//
-//  GamesApp.swift
-//  GamesApp
-//
-//  Created by Juan Hernandez Galvan on 16/07/25.
-//
-
 
 import SwiftUI
+import SwiftData
 
 @main
 struct GamesApp: App {
     var body: some Scene {
         WindowGroup {
-            StartupView()
+            let container = try! ModelContainer(for: Game.self)
+            let context = ModelContext(container)
+            StartupView(context: context)
         }
+        .modelContainer(for: Game.self)
     }
 }

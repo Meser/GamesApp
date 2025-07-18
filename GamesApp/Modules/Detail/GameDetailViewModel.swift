@@ -6,28 +6,36 @@
 //
 
 import Foundation
-import RealmSwift
+import SwiftData
 
+@MainActor
 class GameDetailViewModel: ObservableObject {
     @Published var editedTitle: String
     @Published var editedDescription: String
     @Published var showDeleteConfirmation = false
 
     let game: Game
-    private let repository: GameRepository
+    private var context: ModelContext
 
-    init(game: Game, repository: GameRepository = GameRepository()) {
+    init(game: Game, context: ModelContext) {
         self.game = game
-        self.repository = repository
+        self.context = context
         self.editedTitle = game.title
         self.editedDescription = game.shortDescription
     }
 
-    func saveChanges() {
-        repository.updateGame(game, title: editedTitle, description: editedDescription)
+    func setContext(_ context: ModelContext) {
+        self.context = context
+    }
+    
+    func applyChanges() {
+        game.title = editedTitle
+        game.shortDescription = editedDescription
+        try? context.save()
     }
 
-    func deleteGame() {
-        repository.deleteGame(game)
+    func delete() {
+        context.delete(game)
+        try? context.save()
     }
 }

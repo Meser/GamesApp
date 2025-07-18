@@ -1,8 +1,6 @@
 # IA interactive - Prueba Técnica iOS
 
-Esta aplicación en **SwiftUI (MVVM)** permite descargar, visualizar y gestionar un catálogo de videojuegos desde la API pública de FreeToGame, usando **Realm** para almacenamiento local.
-
-##  Nota: en la rama swiftDataExample se encuentra el mismo proyecto, pero basado en swiftData 🚨🚨🚨
+Esta aplicación en **SwiftUI (MVVM)** permite descargar, visualizar y gestionar un catálogo de videojuegos desde la API pública de FreeToGame, usando **SwiftData** para almacenamiento local.
 
 ## 📱 Funcionalidades
 
@@ -12,7 +10,7 @@ Esta aplicación en **SwiftUI (MVVM)** permite descargar, visualizar y gestionar
 - Vista de detalle del videojuego
 - Edición de título y descripción
 - Eliminación lógica 
-- Persistencia local con Realm
+- Persistencia local con SwiftData
 - SwiftUI + MVVM + Repository
 
 ## 🛠 Requisitos
@@ -24,12 +22,6 @@ Esta aplicación en **SwiftUI (MVVM)** permite descargar, visualizar y gestionar
 ## 📦 Instalación de dependencias
 
 Usa **Swift Package Manager** para agregar:
-
-### RealmSwift
-
-```
-https://github.com/realm/realm-swift
-```
 
 ### SDWebImageSwiftUI
 

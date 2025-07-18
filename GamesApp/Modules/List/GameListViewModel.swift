@@ -6,65 +6,65 @@
 //
 
 import Foundation
+import SwiftData
 import Combine
-import RealmSwift
 
+@MainActor
 class GameListViewModel: ObservableObject {
-    @Published var searchText: String = ""
-    @Published var games: [Game] = []
+    @Published var searchText = ""
+    @Published var filteredGames: [Game] = []
     @Published var errorMessage: String? = nil
-    
-    private let repository = GameRepository()
-    private var allGames: Results<Game>
-    private var token: NotificationToken?
+
+    private var allGames: [Game] = []
+    private let context: ModelContext
     private var cancellables = Set<AnyCancellable>()
-    private let service = APIService()
-    
-    init() {
-        allGames = repository.getAllGames()
-        
-        token = allGames.observe { [weak self] _ in
-            self?.filterGames()
-        }
-        
+
+    init(context: ModelContext) {
+        self.context = context
         $searchText
-            .debounce(for: .seconds(0.5), scheduler: RunLoop.main)
+            .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
             .sink { [weak self] _ in
                 self?.filterGames()
             }
             .store(in: &cancellables)
-        
-        filterGames()
+        fetchInitialGames()
     }
     
-    /// Returns video games data even if user filtered it
-    func filterGames() {
-        let lower = searchText.lowercased()
-        if lower.isEmpty {
-            games = Array(allGames)
+    /// Returns all Game objects fetched
+    func fetchInitialGames() {
+        let descriptor = FetchDescriptor<Game>(
+            sortBy: [SortDescriptor(\.id)]
+        )
+        self.allGames = (try? context.fetch(descriptor)) ?? []
+        self.filteredGames = allGames
+    }
+
+    private func filterGames() {
+        let query = searchText.lowercased()
+        if query.isEmpty {
+            filteredGames = allGames
         } else {
-            games = allGames.filter {
-                $0.platform.lowercased().contains(lower) ||
-                $0.title.lowercased().contains(lower) ||
-                $0.genre.lowercased().contains(lower)
-            }.map { $0 }
+            filteredGames = allGames.filter {
+                $0.title.lowercased().contains(query) ||
+                $0.genre.lowercased().contains(query) ||
+                ($0.platform.lowercased().contains(query))
+            }
         }
     }
+
     
     /// Gets all new data from a web service and renew all games saved
-    @MainActor
     func refreshGames() async {
         do {
-            let dtos = try await withCheckedThrowingContinuation { continuation in
-                service.fetch(from: .games) { (result: Result<[GameDTO], Error>) in
-                    continuation.resume(with: result)
-                }
-            }
-            repository.save(games: dtos)
-            filterGames()
+            let dtos = try await APIService.fetch([GameDTO].self, from: .games)
+            let newGames = dtos.map { $0.toDomain() }
+
+            let repository = GameRepository(context: context)
+            repository.saveGames(newGames)
+
+            fetchInitialGames()
             errorMessage = nil
         } catch {
-            print("Error al actualizar:", error.localizedDescription)
             errorMessage = error.localizedDescription
         }
     }

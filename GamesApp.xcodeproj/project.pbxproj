@@ -7,10 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1772A9FA2E286820005EF6ED /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 1772A9F92E286820005EF6ED /* RealmSwift */; };
-		1772A9FB2E286891005EF6ED /* RealmSwift in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 1772A9F92E286820005EF6ED /* RealmSwift */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		1772AA002E286A15005EF6ED /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 1772A9FF2E286A15005EF6ED /* SDWebImageSwiftUI */; };
-		1772AA062E2875D7005EF6ED /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 1772AA052E2875D7005EF6ED /* RealmSwift */; };
 		17DE43832E29DA1200D433D8 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 17DE43822E29DA1200D433D8 /* README.md */; };
 /* End PBXBuildFile section */
 
@@ -38,7 +35,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				1772A9FB2E286891005EF6ED /* RealmSwift in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -76,7 +72,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				1772AA002E286A15005EF6ED /* SDWebImageSwiftUI in Frameworks */,
-				1772A9FA2E286820005EF6ED /* RealmSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,7 +79,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1772AA062E2875D7005EF6ED /* RealmSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -140,7 +134,6 @@
 			);
 			name = GamesApp;
 			packageProductDependencies = (
-				1772A9F92E286820005EF6ED /* RealmSwift */,
 				1772A9FF2E286A15005EF6ED /* SDWebImageSwiftUI */,
 			);
 			productName = GamesApp;
@@ -165,7 +158,6 @@
 			);
 			name = GamesAppTests;
 			packageProductDependencies = (
-				1772AA052E2875D7005EF6ED /* RealmSwift */,
 			);
 			productName = GamesAppTests;
 			productReference = 1772A9B92E28659F005EF6ED /* GamesAppTests.xctest */;
@@ -228,7 +220,6 @@
 			mainGroup = 1772A9A02E28659C005EF6ED;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				1772A9F62E286820005EF6ED /* XCRemoteSwiftPackageReference "realm-swift" */,
 				1772A9FE2E286A15005EF6ED /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
 			);
 			preferredProjectObjectVersion = 77;
@@ -599,14 +590,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		1772A9F62E286820005EF6ED /* XCRemoteSwiftPackageReference "realm-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/realm/realm-swift.git";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
 		1772A9FE2E286A15005EF6ED /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI.git";
@@ -618,20 +601,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		1772A9F92E286820005EF6ED /* RealmSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1772A9F62E286820005EF6ED /* XCRemoteSwiftPackageReference "realm-swift" */;
-			productName = RealmSwift;
-		};
 		1772A9FF2E286A15005EF6ED /* SDWebImageSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1772A9FE2E286A15005EF6ED /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
 			productName = SDWebImageSwiftUI;
-		};
-		1772AA052E2875D7005EF6ED /* RealmSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1772A9F62E286820005EF6ED /* XCRemoteSwiftPackageReference "realm-swift" */;
-			productName = RealmSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

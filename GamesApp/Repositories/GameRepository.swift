@@ -6,59 +6,58 @@
 //
 
 import Foundation
-import RealmSwift
+import SwiftData
 
 class GameRepository {
-    private let realm: Realm
-    
-    init(realm: Realm = try! Realm()) {
-        self.realm = realm
+    private let context: ModelContext
+
+    init(context: ModelContext) {
+        self.context = context
     }
     
-    /// Saves all game data into Realm
-    /// - Parameter games: Games Array data
-    func save(games: [GameDTO]) {
-        try! realm.write {
-            for dto in games {
-                let game = Game()
-                game.id = dto.id
-                game.title = dto.title
-                game.thumbnail = dto.thumbnail
-                game.platform = dto.platform
-                game.shortDescription = dto.shortDescription
-                game.genre = dto.genre
-                game.releaseDate = dto.releaseDate
-                game.publisher = dto.publisher
-                realm.add(game, update: .modified)
-            }
+    /// Save all data in context
+    /// - Parameter games: Array of Game models
+    func saveGames(_ games: [Game]) {
+        for game in games {
+            context.insert(game)
         }
+        try? context.save()
     }
     
-    /// Returns all games saved previously from Realm
-    /// - Returns: All video games already saved
-    func getAllGames() -> Results<Game> {
-        realm.objects(Game.self).filter("isDeleted == false")
-    }
-    
-    /// Deletes a specific video game
-    /// - Parameter game: video game selection to delete
-    func deleteGame(_ game: Game) {
-        guard let thawedGame = game.thaw() else { return }
-        try! realm.write {
-            thawedGame.isDeleted = true
-        }
-    }
-    
-    /// Updates information of a specific video game
+    /// Save changes maded to a Game model
     /// - Parameters:
-    ///   - game: game Data
-    ///   - title: title of the game
-    ///   - description: description of the game
+    ///   - game: Game model
+    ///   - title: New title to assign
+    ///   - description: New description to assign
     func updateGame(_ game: Game, title: String, description: String) {
-        guard let thawedGame = game.thaw() else { return }
-        try! realm.write {
-            thawedGame.title = title
-            thawedGame.shortDescription = description
-        }
+        game.title = title
+        game.shortDescription = description
+        try? context.save()
+    }
+    
+    /// Delete a selected game
+    /// - Parameter game: Game data to delete
+    func deleteGame(_ game: Game) {
+        context.delete(game)
+        try? context.save()
+    }
+    
+    /// Returns all games saved previously
+    /// - Returns: All video games already saved
+    func fetchAllGames() -> [Game] {
+        let descriptor = FetchDescriptor<Game>(
+            sortBy: [SortDescriptor(\.id)]
+        )
+        return (try? context.fetch(descriptor)) ?? []
+    }
+    
+    /// Search for specific game based on a query
+    /// - Parameter query: search parameter
+    /// - Returns: All games related to a query
+    func searchGames(query: String) -> [Game] {
+        let descriptor = FetchDescriptor<Game>(
+            predicate: #Predicate { $0.title.localizedStandardContains(query) || $0.genre.localizedStandardContains(query) }
+        )
+        return (try? context.fetch(descriptor)) ?? []
     }
 }

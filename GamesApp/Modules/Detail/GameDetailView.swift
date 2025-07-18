@@ -6,19 +6,21 @@
 //
 
 import SwiftUI
-import RealmSwift
+import SwiftData
 import SDWebImageSwiftUI
 
 struct GameDetailView: View {
     @Environment(\.dismiss) var dismiss
+    @Environment(\.modelContext) private var context
     @StateObject private var viewModel: GameDetailViewModel
     var onUpdate: (() -> Void)?
 
     init(game: Game, onUpdate: (() -> Void)? = nil) {
-        _viewModel = StateObject(wrappedValue: GameDetailViewModel(game: game))
+        let dummyContext = try! ModelContext(ModelContainer(for: Game.self))
+        _viewModel = StateObject(wrappedValue: GameDetailViewModel(game: game, context: dummyContext))
         self.onUpdate = onUpdate
     }
-    
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
@@ -38,9 +40,9 @@ struct GameDetailView: View {
                     BodyText(text: viewModel.game.releaseDate)
                 }
                 .padding(.horizontal)
-                
+
                 Button(action: {
-                    viewModel.saveChanges()
+                    viewModel.applyChanges()
                     onUpdate?()
                     dismiss()
                 }) {
@@ -50,6 +52,9 @@ struct GameDetailView: View {
                 .buttonStyle(.borderedProminent)
                 .padding()
             }
+        }
+        .onAppear {
+            viewModel.setContext(context)
         }
         .onTapGesture {
             UIApplication.shared.endEditing()
@@ -67,7 +72,7 @@ struct GameDetailView: View {
         }
         .alert("delete_game", isPresented: $viewModel.showDeleteConfirmation) {
             Button("delete_title", role: .destructive) {
-                viewModel.deleteGame()
+                viewModel.delete()
                 onUpdate?()
                 dismiss()
             }

@@ -6,84 +6,57 @@
 //
 
 import XCTest
-import RealmSwift
+import SwiftData
 @testable import GamesApp
 
 final class GamesAppTests: XCTestCase {
-    var realm: Realm!
-    var repository: GameRepository!
+    var modelContainer: ModelContainer!
+    var context: ModelContext!
     
+    @MainActor
     override func setUpWithError() throws {
-        var config = Realm.Configuration()
-        config.inMemoryIdentifier = "TestRealm"
-        realm = try! Realm(configuration: config)
-        repository = GameRepository(realm: realm)
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        modelContainer = try ModelContainer(for: Game.self, configurations: config)
+        context = modelContainer.mainContext
     }
 
     override func tearDownWithError() throws {
-        try! realm.write {
-            realm.deleteAll()
-        }
-        repository = nil
-        realm = nil
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
+    
+    func testSaveChangesUpdatesGame() async throws {
+        let game = Game(id: 1, title: "Old", thumbnail: "", shortDescription: "Old Desc", genre: "Action", platform: "PC", releaseDate: "2022-01-01", publisher: "Dev")
+        context.insert(game)
+        try context.save()
 
-    func testSaveAndRetrieveGame() {
-        let dto = GameDTO(id: 1,
-                          title: "Test Game",
-                          thumbnail: "url",
-                          shortDescription: "Desc",
-                          genre: "Action",
-                          platform: "PC Windows",
-                          releaseDate: "2024-06-22",
-                          publisher: "Blizzard Entertainment")
-        repository.save(games: [dto])
-        let results = repository.getAllGames()
-        XCTAssertEqual(results.count, 1)
-        XCTAssertEqual(results.first?.title, "Test Game")
+        let vm = await MainActor.run {
+            GameDetailViewModel(game: game, context: context)
+        }
+
+        await MainActor.run {
+            vm.editedTitle = "New Title"
+            vm.editedDescription = "New Desc"
+        }
+
+        await vm.applyChanges()
+
+        XCTAssertEqual(game.title, "New Title")
+        XCTAssertEqual(game.shortDescription, "New Desc")
     }
 
-    func testUpdateGame() {
-        let dto = GameDTO(id: 2,
-                          title: "Old Title",
-                          thumbnail: "url",
-                          shortDescription: "Old Desc",
-                          genre: "RPG",
-                          platform: "PC Windows",
-                          releaseDate: "2024-06-22",
-                          publisher: "Blizzard Entertainment")
-        repository.save(games: [dto])
-        guard let game = repository.getAllGames().first else {
-            XCTFail("No game found")
-            return
-        }
-        repository.updateGame(game,
-                              title: "New Title",
-                              description: "New Desc")
-        let updated = repository.getAllGames().first
-        XCTAssertEqual(updated?.title, "New Title")
-        XCTAssertEqual(updated?.shortDescription, "New Desc")
-    }
+    func testDeleteGameRemovesFromContext() async throws {
+        let game = Game(id: 2, title: "To Delete", thumbnail: "", shortDescription: "", genre: "RPG", platform: "PC", releaseDate: "", publisher: "")
+        context.insert(game)
+        try context.save()
 
-    func testDeleteGame() {
-        let dto = GameDTO(id: 3,
-                          title: "ToDelete",
-                          thumbnail: "url",
-                          shortDescription: "Desc",
-                          genre: "Puzzle",
-                          platform: "PC Windows",
-                          releaseDate: "2024-06-22",
-                          publisher: "Blizzard Entertainment")
-        repository.save(games: [dto])
-        guard let game = repository.getAllGames().first else {
-            XCTFail("No game found")
-            return
+        let vm = await MainActor.run {
+            GameDetailViewModel(game: game, context: context)
         }
-        repository.deleteGame(game)
-        let remaining = repository.getAllGames()
-        XCTAssertEqual(remaining.count, 0)
+
+        await vm.delete()
+
+        let fetched = try context.fetch(FetchDescriptor<Game>())
+        XCTAssertFalse(fetched.contains { $0.id == game.id })
     }
 
     func testPerformanceExample() throws {

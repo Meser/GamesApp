@@ -18,26 +18,11 @@ class APIService {
     /// - Parameters:
     ///   - path: path from web service
     ///   - completion: block to retun Result<T, Error>
-    func fetch<T: Decodable>(from path: APIEndpoint, completion: @escaping (Result<T, Error>) -> Void) {
-        guard let url = URL(string: path.rawValue) else {
-            completion(.failure(URLError(.badURL)))
-            return
+    static func fetch<T: Decodable>(_ type: T.Type, from endpoint: APIEndpoint) async throws -> T {
+            guard let url = URL(string: endpoint.rawValue) else {
+                throw URLError(.badURL)
+            }
+            let (data, _) = try await URLSession.shared.data(from: url)
+            return try JSONDecoder().decode(T.self, from: data)
         }
-        URLSession.shared.dataTask(with: url) { data, _, error in
-            if let error = error {
-                completion(.failure(error))
-                return
-            }
-            guard let data = data else {
-                completion(.failure(URLError(.badServerResponse)))
-                return
-            }
-            do {
-                let decoded = try JSONDecoder().decode(T.self, from: data)
-                completion(.success(decoded))
-            } catch {
-                completion(.failure(error))
-            }
-        }.resume()
-    }
 }

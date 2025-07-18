@@ -29,3 +29,19 @@ struct GameDTO: Decodable {
         case publisher
     }
 }
+
+// Parse DTO to swiftData model
+extension GameDTO {
+    func toDomain() -> Game {
+        Game(
+            id: id,
+            title: title,
+            thumbnail: thumbnail,
+            shortDescription: shortDescription,
+            genre: genre,
+            platform: platform,
+            releaseDate: releaseDate,
+            publisher: publisher
+        )
+    }
+}
