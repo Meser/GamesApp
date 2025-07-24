@@ -1,29 +1,29 @@
-# IA interactive - Prueba Técnica iOS
+# iOS Technical Test
 
-Esta aplicación en **SwiftUI (MVVM)** permite descargar, visualizar y gestionar un catálogo de videojuegos desde la API pública de FreeToGame, usando **Realm** para almacenamiento local.
+This application built with **SwiftUI (MVVM)** allows you to download, view, and manage a video game catalog from the public FreeToGame API, using **Realm** for local storage.
 
-##  Nota: en la rama swiftDataExample se encuentra el mismo proyecto, pero basado en swiftData 🚨🚨🚨
+##  Note: The branch `swiftDataExample` contains the same project but based on SwiftData 🚨🚨🚨
 
-## 📱 Funcionalidades
+## 📱 Features
 
-- Descarga inicial desde: `https://www.freetogame.com/api/games`
-- Búsqueda por nombre o categoría
-- Deslizar hacia abajo para actualizar (Refreshable List)
-- Vista de detalle del videojuego
-- Edición de título y descripción
-- Eliminación lógica 
-- Persistencia local con Realm
-- SwiftUI + MVVM + Repository
+- Initial download from: `https://www.freetogame.com/api/games`
+- Search by name or category
+- Pull to refresh (Refreshable List)
+- Game detail view
+- Edit title and description
+- Logical deletion
+- Local persistence with Realm
+- SwiftUI + MVVM + Repository pattern
 
-## 🛠 Requisitos
+## 🛠 Requirements
 
 - Xcode 15+
 - Swift 5.9+
 - iOS 16+
 
-## 📦 Instalación de dependencias
+## 📦 Dependency Installation
 
-Usa **Swift Package Manager** para agregar:
+Use **Swift Package Manager** to add:
 
 ### RealmSwift
 
@@ -37,7 +37,7 @@ https://github.com/realm/realm-swift
 https://github.com/SDWebImage/SDWebImageSwiftUI
 ```
 
-## 📂 Estructura del Proyecto
+## 📂 Project Structure
 
 ```
 GamesApp/
@@ -52,19 +52,19 @@ GamesApp/
 ├── Utilities/
 ```
 
-## ▶️ Ejecución
+## ▶️ Running the App
 
-1. Abre el proyecto en Xcode.
-2. Agrega las dependencias vía SPM.
-3. Establece `StartupView` como la vista raíz en `GamesAppApp.swift`.
-4. Ejecuta la app en el simulador.
+1. Open the project in Xcode.
+2. Add the dependencies via SPM.
+3. Set `StartupView` as the root view in `GamesAppApp.swift`.
+4. Run the app on the simulator.
 
 ## ✅ Bonus
 
-- Soporte a multiples lenguajes 
-- Arquitectura MVVM limpia
-- Ejemplos de tests con XCTest
+- Multi-language support  
+- Clean MVVM architecture  
+- Example unit tests with XCTest
 
 ---
 
-Desarrollado como parte de la prueba técnica de IA interactive
+Developed as part of an iOS technical test.
